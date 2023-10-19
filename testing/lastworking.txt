@@ -1,0 +1,57 @@
+package main
+
+import (
+	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"net/url"
+	"time"
+)
+
+func main() {
+	reverseProxy := http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		fmt.Printf("[reverse proxy server] received request at: %s\n", time.Now())
+
+		// define origin server URL
+		originServerURL, err := url.Parse("http://pocketbase:8080/")
+		if err != nil {
+			log.Fatal("invalid origin server URL")
+		}
+
+		// set req Host, URL and RequestURI to forward a request to the origin server
+		req.Host = originServerURL.Host
+		req.URL.Host = originServerURL.Host
+		req.URL.Scheme = originServerURL.Scheme
+		req.RequestURI = ""
+
+		req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
+		req.Header.Set("X-Real-IP", req.RemoteAddr) // Simulate X-Real-IP header behavior
+		req.Header.Set("X-Forwarded-For", req.RemoteAddr)
+		req.Header.Set("X-Forwarded-Proto", req.URL.Scheme)
+
+		// send a request to the origin server
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			rw.WriteHeader(http.StatusInternalServerError)
+			_, _ = fmt.Fprint(rw, err)
+			return
+		}
+		defer resp.Body.Close()
+
+		// Copy headers from the origin server response to the client response
+		for key, values := range resp.Header {
+			for _, value := range values {
+				rw.Header().Add(key, value)
+			}
+		}
+
+		// Copy status code from the origin server response to the client response
+		rw.WriteHeader(resp.StatusCode)
+
+		// Copy response body from the origin server response to the client response
+		_, _ = io.Copy(rw, resp.Body)
+	})
+
+	log.Fatal(http.ListenAndServe(":8080", reverseProxy))
+}

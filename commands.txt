@@ -1,0 +1,11 @@
+docker build . -t monsieurlazar/pocketbase
+docker run --name docker-nginx -p 80:80 nginx
+
+
+
+docker build . -t dash
+docker run -d -p 8080:80 --name proxy --network=lazar-static proxy
+docker run -d -p 69:80 --name website --network=lazar-static static
+docker run -d -p 8000:8080 --name dashboard --network=lazar-static dash
+docker run -d -p 70:8080 --name pocketbase --network=lazar-static monsieurlazar/pocketbase
+docker network create lazar-static
