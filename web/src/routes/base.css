@@ -1,0 +1,101 @@
+:focus-visible {
+  outline-color: var(--primaryColor);
+  outline-style: solid;
+}
+
+html,
+body {
+  line-height: var(--baseLineHeight);
+  font-family: var(--baseFontFamily);
+  font-size: var(--baseFontSize);
+  color: var(--txtPrimaryColor);
+  background: var(--bodyColor);
+}
+
+#app {
+  overflow: auto;
+  display: block;
+  width: 100%;
+  height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: normal;
+}
+h1 {
+  font-size: 22px;
+  line-height: 28px;
+}
+h2 {
+  font-size: 20px;
+  line-height: 26px;
+}
+h3 {
+  font-size: 19px;
+  line-height: 24px;
+}
+h4 {
+  font-size: 18px;
+  line-height: 24px;
+}
+h5 {
+  font-size: 17px;
+  line-height: 24px;
+}
+h6 {
+  font-size: 16px;
+  line-height: 22px;
+}
+
+em {
+  font-style: italic;
+}
+
+ins {
+  color: var(--txtPrimaryColor);
+  background: var(--successAltColor);
+  text-decoration: none;
+}
+
+del {
+  color: var(--txtPrimaryColor);
+  background: var(--dangerAltColor);
+  text-decoration: none;
+}
+
+strong {
+  font-weight: 600;
+}
+
+small {
+  font-size: var(--smFontSize);
+  line-height: var(--smLineHeight);
+}
+
+sub,
+sup {
+  position: relative;
+  font-size: 0.75em;
+  line-height: 1;
+}
+sup {
+  vertical-align: top;
+}
+sub {
+  vertical-align: bottom;
+}
+
+p {
+  margin: 5px 0;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: top;
+}

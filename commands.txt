@@ -11,3 +11,7 @@ docker run -d -p 8000:8080 --name dashboard --network=lazar-static dash
 docker run -d -p 70:8080 --name pocketbase --network=lazar-static monsieurlazar/pocketbase
 docker run -d -p 71:8080 --name pocketbase-lazar --network=lazar-static monsieurlazar/pocketbase
 docker network create lazar-static
+
+
+docker build . -t lazarbase
+docker run -d -p 8080:80 --name lazar-dash -v /var/run/docker.sock:/var/run/docker.sock --network=lazar-static lazarbase

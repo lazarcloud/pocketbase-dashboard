@@ -1,22 +1,33 @@
-FROM alpine:latest
+FROM golang:alpine AS golang-build
 
-ARG PB_VERSION=0.19.0
+WORKDIR /golang
 
-RUN apk add --no-cache \
-    unzip \
-    ca-certificates
+COPY ./api/go.mod ./api/go.sum ./
 
-# download and unzip PocketBase
-ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
-RUN unzip /tmp/pb.zip -d /pb/
+RUN go mod download
 
-# uncomment to copy the local pb_migrations dir into the image
-# COPY ./pb_migrations /pb/pb_migrations
+COPY ./api/ ./
 
-# uncomment to copy the local pb_hooks dir into the image
-# COPY ./pb_hooks /pb/pb_hooks
+RUN go build -o main .
 
-EXPOSE 8080
 
-# start PocketBase
-CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8080"]
+FROM node:alpine AS svelte
+
+WORKDIR /svelte
+
+COPY ./web/package*.json ./
+
+RUN npm install
+
+COPY ./web/ .
+
+RUN npm run build
+
+FROM busybox:latest AS runtime
+COPY --from=golang-build ./golang/main ./main
+RUN chmod +x ./main
+
+# COPY ./api/clean-data ./clean-data
+
+COPY --from=svelte ./svelte/build .
+CMD ./main & exec busybox httpd -f -v -p 5173
