@@ -3,4 +3,14 @@
   import "./base.css"
 </script>
 
-<slot />
+<div class="main">
+  <slot />
+</div>
+
+<style>
+  .main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+</style>

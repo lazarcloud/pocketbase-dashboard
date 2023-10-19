@@ -19,7 +19,7 @@
   </div>
 </section>
 <section class="content">
-  {#each [{ name: "lazar1" }, { name: "lazar1" }, { name: "lazar1" }] as project}
+  {#each [{ name: "lazar1" }, { name: "lazar1" }, { name: "lazar1" }, { name: "lazar1" }, { name: "lazar1" }] as project}
     <div class="project">
       <h2>{project.name}</h2>
       <p>Project description</p>
@@ -112,7 +112,6 @@
   }
   .content {
     padding: 1rem;
-    height: 75vh;
     overflow-y: auto;
   }
   .controls {
