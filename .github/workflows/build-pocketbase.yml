@@ -1,0 +1,30 @@
+name: Build LazarBase Pocketbase Container
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - status/**
+      - .github/workflows/build-pocketbase.yml
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build and Push Docker Image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          IMAGE_NAME: monsieurlazar/pocketbase
+        run: |
+          sudo docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+          sudo docker build --pull --cache-from $IMAGE_NAME \
+            --tag $IMAGE_NAME:$GITHUB_SHA \
+            --tag $IMAGE_NAME:latest \
+            -f Buildpocketbase .
+          sudo docker push $IMAGE_NAME:$GITHUB_SHA
+          sudo docker push $IMAGE_NAME:latest

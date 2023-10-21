@@ -1,0 +1,11 @@
+Use TLS (Transport Layer Security): TLS encrypts your messages while they’re in transit, protecting sensitive information like API credentials and private data1.
+
+Implement an API Token: This behaves like a password for your API. You can use the Bearer Header with the token value to come from the API and include this token as a header in every request sent via your app2.
+
+Define Permissions and Consent: This process is called authorization. You need to define who can view or modify data on your server1.
+
+Use CSRF Tokens: CSRF tokens can help prevent outsiders from calling your web services3.
+
+Force HTTPS on the site: Automatically redirect any incoming HTTP requests to HTTPS ones3.
+
+Use One-Time Use Tokens: Each page needs to send a one-time use token to the client, to be used for the page. Any request coming back sends a hashed & salted response, along with the nonce salt3.
