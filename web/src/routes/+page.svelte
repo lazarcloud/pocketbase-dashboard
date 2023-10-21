@@ -1,6 +1,34 @@
 <script>
+  import { goto, invalidateAll } from "$app/navigation"
   import Logo from "$lib/Logo.svelte"
+  import { getProjects, createProject } from "$lib/api"
+  import { onMount } from "svelte"
+  function randomName(length = 8) {
+    let name = ""
+    const possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    for (let i = 0; i < length; i++)
+      name += possible.charAt(Math.floor(Math.random() * possible.length))
+    return name
+  }
+  async function getProjectsClient() {
+    const res = await getProjects()
+    projectsData = res
+  }
+  let instanceName = randomName()
+  let projectsData = null
   let showPopup = false
+
+  let interval = null
+
+  onMount(() => {
+    interval = setInterval(async () => {
+      let newData = await getProjects()
+      if (JSON.stringify(newData) !== JSON.stringify(projectsData)) {
+        projectsData = newData
+      }
+    }, 1000)
+  })
 </script>
 
 <section class="block">
@@ -19,20 +47,34 @@
   </div>
 </section>
 <section class="content">
-  {#each [{ name: "lazar1" }, { name: "lazar1" }, { name: "lazar1" }, { name: "lazar1" }, { name: "lazar1" }] as project}
-    <div class="project">
-      <h2>{project.name}</h2>
-      <p>Project description</p>
-      <p>Created: 2021-01-01</p>
-      <p>API URL: https://pocket.lazar.lol/project/lazar/api/</p>
-      <p>Dashnoard URL: https://pocket.lazar.lol/project/lazar/_/</p>
-      <div class="separator" />
-      <div class="controls">
-        <button>Go to Dashboard</button>
-        <button> Edit</button>
-      </div>
-    </div>
-  {/each}
+  {#await getProjectsClient()}
+    <p>loading...</p>
+  {:then _}
+    {#if projectsData == null}
+      <p>No projects found</p>
+    {:else}
+      {#each projectsData as project}
+        <div class="project">
+          <h2>{project.Name} - {project.Status}</h2>
+          <p>Project description</p>
+          <p>Created: 2021-01-01</p>
+          <p>API URL: https://pocket.lazar.lol/project/lazar/api/</p>
+          <p>Dashnoard URL: https://pocket.lazar.lol/project/lazar/_/</p>
+          <div class="separator" />
+          <div class="controls">
+            <button
+              on:click={() => {
+                goto(`/dashbaord/${project.Name}/_/`)
+              }}>Go to Dashboard</button
+            >
+            <button> Edit</button>
+          </div>
+        </div>
+      {/each}
+    {/if}
+  {:catch error}
+    <p>{error.message}</p>
+  {/await}
 </section>
 {#if showPopup}
   <section
@@ -46,8 +88,13 @@
       <h1>New Project</h1>
 
       <div class="separator" />
-      <label>Name</label>
-      <input type="text" placeholder="Instance name" />
+      <label for="instanceName">Name</label>
+      <input
+        type="text"
+        id="instanceName"
+        bind:value={instanceName}
+        placeholder="Instance name"
+      />
       <label>Description</label>
       <input type="text" placeholder="Instance description" />
     </div>
@@ -59,7 +106,18 @@
 
         <div class="controls">
           <button on:click={() => (showPopup = false)}>Close</button>
-          <button on:click={() => {}} class="black"> Create</button>
+          <button
+            on:click={async () => {
+              const res = await createProject(instanceName)
+              console.log(res)
+              showPopup = false
+              projectsData = await getProjects()
+              await invalidateAll()
+            }}
+            class="black"
+          >
+            Create</button
+          >
         </div>
       </div>
     </div>

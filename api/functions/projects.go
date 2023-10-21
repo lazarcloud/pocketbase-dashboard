@@ -22,10 +22,22 @@ type ContainerDetails struct {
 	Description string    `json:"description"`
 }
 
+func respondWithJSON(w http.ResponseWriter, statusCode int, data interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(statusCode)
+	err := json.NewEncoder(w).Encode(data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
 func GetProjects(w http.ResponseWriter, r *http.Request) {
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error creating Docker client",
+			"error":   err.Error(),
+		})
 		return
 	}
 	// Get list of all containers
@@ -33,7 +45,10 @@ func GetProjects(w http.ResponseWriter, r *http.Request) {
 		All: true,
 	})
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error getting container list",
+			"error":   err.Error(),
+		})
 		return
 	}
 
@@ -74,7 +89,10 @@ func GetProjects(w http.ResponseWriter, r *http.Request) {
 	// Convert the container list to JSON and send it as the response
 	jsonBytes, err := json.Marshal(pocketbaseContainers)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error converting container list to JSON",
+			"error":   err.Error(),
+		})
 		return
 	}
 
@@ -85,7 +103,10 @@ func CreateProject(w http.ResponseWriter, r *http.Request) {
 
 	id := r.URL.Query().Get("slug")
 	if id == "" {
-		http.Error(w, "No slug provided", http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Provide a slug wirh ?slug=<container-name>",
+			"error":   "No slug provided",
+		})
 		return
 	}
 
@@ -97,7 +118,10 @@ func CreateProject(w http.ResponseWriter, r *http.Request) {
 
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error creating Docker client",
+			"error":   err.Error(),
+		})
 		return
 	}
 
@@ -112,67 +136,103 @@ func CreateProject(w http.ResponseWriter, r *http.Request) {
 		}, nil, nil, "pocketbase-"+id,
 	)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error creating container",
+			"error":   err.Error(),
+		})
 		return
 	}
 
 	err = cli.ContainerStart(context.Background(), resp.ID, types.ContainerStartOptions{})
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error starting container",
+			"error":   err.Error(),
+		})
 		return
 	}
 
 	err = cli.NetworkConnect(context.Background(), "lazar-static", resp.ID, nil)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error connecting container to network",
+			"error":   err.Error(),
+		})
 		return
 	}
 
 	fmt.Println(resp.ID)
-
-	w.Write([]byte(resp.ID))
+	respondWithJSON(w, http.StatusOK, map[string]string{
+		"message": "Container created successfully",
+		"id":      resp.ID,
+	})
 }
 
 func StopProject(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("slug")
 	if id == "" {
-		http.Error(w, "No slug provided", http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Provide a slug wirh ?slug=<container-name>",
+			"error":   "No slug provided",
+		})
 		return
 	}
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error creating Docker client",
+			"error":   err.Error(),
+		})
 		return
 	}
 
 	// Stop the container with the given ID
 	err = cli.ContainerStop(context.Background(), "pocketbase-"+id, container.StopOptions{})
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error stopping container",
+			"error":   err.Error(),
+		})
 		return
 	}
 
-	w.Write([]byte("Container stopped successfully"))
+	respondWithJSON(w, http.StatusOK, map[string]string{
+		"message": "Container stopped successfully",
+		"id":      "pocketbase-" + id,
+	})
+
 }
 
 func StartProject(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("slug")
 	if id == "" {
-		http.Error(w, "No slug provided", http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Provide a slug wirh ?slug=<container-name>",
+			"error":   "No slug provided",
+		})
 		return
 	}
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error creating Docker client",
+			"error":   err.Error(),
+		})
 		return
 	}
 
 	// Start the container with the given ID
 	err = cli.ContainerStart(context.Background(), "pocketbase-"+id, types.ContainerStartOptions{})
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		respondWithJSON(w, http.StatusInternalServerError, map[string]string{
+			"message": "Error starting container",
+			"error":   err.Error(),
+		})
 		return
 	}
 
-	w.Write([]byte("Container started successfully"))
+	respondWithJSON(w, http.StatusOK, map[string]string{
+		"message": "Container started successfully",
+		"id":      "pocketbase-" + id,
+	})
 }
