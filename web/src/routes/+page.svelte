@@ -1,8 +1,27 @@
 <script>
   import { goto, invalidateAll } from "$app/navigation"
   import Logo from "$lib/Logo.svelte"
-  import { getProjects, createProject } from "$lib/api"
   import { onMount } from "svelte"
+
+  let baseURL = null
+
+  export async function fetchAPI(url) {
+    const response = await fetch(baseURL + url)
+    const data = await response.json()
+    return data
+  }
+
+  export async function getProjects() {
+    return await fetchAPI("projects")
+  }
+  export async function createProject(name) {
+    let response = await fetchAPI("create?slug=" + name)
+    return {
+      id: response,
+      name: name,
+    }
+  }
+
   function randomName(length = 8) {
     let name = ""
     const possible =
@@ -22,12 +41,17 @@
   let interval = null
 
   onMount(() => {
+    baseURL = window.location.href
     interval = setInterval(async () => {
       let newData = await getProjects()
       if (JSON.stringify(newData) !== JSON.stringify(projectsData)) {
         projectsData = newData
       }
     }, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
   })
 </script>
 
@@ -47,9 +71,7 @@
   </div>
 </section>
 <section class="content">
-  {#await getProjectsClient()}
-    <p>loading...</p>
-  {:then _}
+  {#if baseURL != null}
     {#if projectsData == null}
       <p>No projects found</p>
     {:else}
@@ -72,9 +94,9 @@
         </div>
       {/each}
     {/if}
-  {:catch error}
-    <p>{error.message}</p>
-  {/await}
+  {:else}
+    <p>Loading...</p>
+  {/if}
 </section>
 {#if showPopup}
   <section

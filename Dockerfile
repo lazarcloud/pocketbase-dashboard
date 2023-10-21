@@ -26,9 +26,12 @@ COPY ./web/ .
 RUN npm run build
 
 FROM busybox:latest AS runtime
+
+ENV ORIGIN=http://localhost:8080/
+
 COPY --from=golang-build ./golang/main ./main
 
 # COPY ./api/clean-data ./clean-data
 
 COPY --from=svelte ./svelte/build ./website
-CMD /main & cd website && exec busybox httpd -f -v -p 5173
+CMD /main -origin=$ORIGIN & cd website && exec busybox httpd -f -v -p 5173

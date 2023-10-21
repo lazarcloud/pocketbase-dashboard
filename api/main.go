@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"strings"
@@ -9,9 +10,11 @@ import (
 	"github.com/lazarcloud/pocketbase-dashboard/api/paths"
 )
 
+var origin string
+
 func enableCORS(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Origin", origin)
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
 
@@ -25,6 +28,11 @@ func enableCORS(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func main() {
+	flag.StringVar(&origin, "origin", "http://localhost:8080/", "Define website origin")
+	flag.Parse()
+
+	fmt.Printf("Origin: %s\n", origin)
+
 	http.HandleFunc("/", enableCORS(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("New request: %s\n", r.URL.Path)
 		pathManager := paths.NewPathManager(r)
