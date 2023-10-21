@@ -5,23 +5,24 @@
 
   let baseURL = null
 
-  export async function fetchAPI(url) {
+  async function fetchAPI(url) {
     const response = await fetch(baseURL + url)
     const data = await response.json()
     return data
   }
 
-  export async function getProjects() {
+  async function getProjects() {
     return await fetchAPI("projects")
   }
-  export async function createProject(name) {
-    let response = await fetchAPI("create?slug=" + name)
-    return {
-      id: response,
-      name: name,
-    }
+  async function createProject(name) {
+    return await fetchAPI("create?slug=" + name)
   }
-
+  async function startProject(name) {
+    return await fetchAPI("start?slug=" + name)
+  }
+  async function stopProject(name) {
+    return await fetchAPI("stop?slug=" + name)
+  }
   function randomName(length = 8) {
     let name = ""
     const possible =
@@ -35,7 +36,7 @@
     projectsData = res
   }
   let instanceName = randomName()
-  let projectsData = null
+  let projectsData = ""
   let showPopup = false
 
   let interval = null
@@ -72,7 +73,9 @@
 </section>
 <section class="content">
   {#if baseURL != null}
-    {#if projectsData == null}
+    {#if projectsData == ""}
+      <p>Loading...</p>
+    {:else if projectsData == null}
       <p>No projects found</p>
     {:else}
       {#each projectsData as project}
@@ -89,7 +92,19 @@
                 goto(`/project/${project.Name.split("-")[1]}/_/`)
               }}>Go to Dashboard</button
             >
-            <button> Edit</button>
+            {#if project.Status == "running"}
+              <button
+                on:click={async () => {
+                  await stopProject(project.Name.split("-")[1])
+                }}>Stop</button
+              >
+            {:else if project.Status == "stopped" || project.Status == "exited"}
+              <button
+                on:click={async () => {
+                  await startProject(project.Name.split("-")[1])
+                }}>Start</button
+              >
+            {/if}
           </div>
         </div>
       {/each}

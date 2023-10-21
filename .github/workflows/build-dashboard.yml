@@ -1,33 +1,33 @@
-name: Build LazarBase Supabase Dashboard
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - api/**
-      - web/**
-      - .github/workflows/build-dashboard.yml
-      - Dockerfile
-      - .dockerignore
-  workflow_dispatch:
+# name: Build LazarBase PocketBase Dashboard
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - api/**
+#       - web/**
+#       - .github/workflows/build-dashboard.yml
+#       - Dockerfile
+#       - .dockerignore
+#   workflow_dispatch:
 
-jobs:
-  build-and-deploy:
-    name: Build and Deploy
-    runs-on: self-hosted
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Build and Push Docker Image
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          IMAGE_NAME: monsieurlazar/supabase-dashboard
-        run: |
-          sudo docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
-          sudo docker build --pull --cache-from $IMAGE_NAME \
-            --tag $IMAGE_NAME:$GITHUB_SHA \
-            --tag $IMAGE_NAME:latest \
-            .
-          sudo docker push $IMAGE_NAME:$GITHUB_SHA
-          sudo docker push $IMAGE_NAME:latest
+# jobs:
+#   build-and-deploy:
+#     name: Build and Deploy
+#     runs-on: self-hosted
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+#       - name: Build and Push Docker Image
+#         env:
+#           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+#           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+#           IMAGE_NAME: monsieurlazar/supabase-dashboard
+#         run: |
+#           sudo docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+#           sudo docker build --pull --cache-from $IMAGE_NAME \
+#             --tag $IMAGE_NAME:$GITHUB_SHA \
+#             --tag $IMAGE_NAME:latest \
+#             .
+#           sudo docker push $IMAGE_NAME:$GITHUB_SHA
+#           sudo docker push $IMAGE_NAME:latest
