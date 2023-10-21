@@ -11,3 +11,6 @@ Force HTTPS on the site: Automatically redirect any incoming HTTP requests to HT
 Use One-Time Use Tokens: Each page needs to send a one-time use token to the client, to be used for the page. Any request coming back sends a hashed & salted response, along with the nonce salt3.
 
 an api token that can be seen on first page load / auth system?
+
+
+https://github.com/pocketbase/pocketbase/discussions/672
