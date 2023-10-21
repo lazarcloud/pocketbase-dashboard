@@ -6,6 +6,7 @@ on:
     paths:
       - status/**
       - .github/workflows/build-pocketbase.yml
+      - Buildpocketbase
   workflow_dispatch:
 
 jobs:

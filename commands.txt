@@ -18,4 +18,4 @@ docker run -d -p 8081:80 -e ORIGIN=http://localhost:8081 --name lazar-dash -v /v
 
 
 #my VM
-docker run -d -e ORIGIN=https://pocket.lazar.lol/ --name lazar-dash -v /var/run/docker.sock:/var/run/docker.sock -v /home/pocketbase/metadata:/data --network=lazar-static monsieurlazar/lazarbase
+docker run -d -e ORIGIN=https://pocket.lazar.lol/ --name lazar-dash -v /var/run/docker.sock:/var/run/docker.sock -v /home/pocketbase/metadata:/data --network=lazar-static monsieurlazar/pocketbase-dashboard
