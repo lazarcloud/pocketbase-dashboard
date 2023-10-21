@@ -64,7 +64,7 @@
           <div class="controls">
             <button
               on:click={() => {
-                goto(`/dashbaord/${project.Name}/_/`)
+                goto(`/project/${project.Name.split("-")[1]}/_/`)
               }}>Go to Dashboard</button
             >
             <button> Edit</button>

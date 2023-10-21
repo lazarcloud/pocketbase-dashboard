@@ -28,7 +28,7 @@ func main() {
 	http.HandleFunc("/", enableCORS(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("New request: %s\n", r.URL.Path)
 		pathManager := paths.NewPathManager(r)
-		if pathManager.GetPartsLength() >= 3 && pathManager.GetFirstPart() == "dashboard" {
+		if pathManager.GetPartsLength() >= 3 && pathManager.GetFirstPart() == "project" {
 			targetURL := "http://pocketbase-" + pathManager.Parts()[2] + ":8080"
 			r.URL.Path = "/" + strings.Join(pathManager.Parts()[3:], "/")
 			functions.ServeReverseProxy(targetURL, w, r)
