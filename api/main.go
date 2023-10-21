@@ -18,9 +18,11 @@ func main() {
 			r.URL.Path = "/" + strings.Join(pathManager.Parts()[3:], "/")
 			functions.ServeReverseProxy(targetURL, w, r)
 		} else if strings.HasPrefix(r.URL.Path, "/_app/immutable/") {
-			http.StripPrefix("/_app/immutable/", http.FileServer(http.Dir("/_app/immutable/"))).ServeHTTP(w, r)
+			http.StripPrefix("/_app/immutable/", http.FileServer(http.Dir("/website/_app/immutable/"))).ServeHTTP(w, r)
+		} else if strings.Contains(pathManager.GetFirstPart(), ".") {
+			http.StripPrefix("/", http.FileServer(http.Dir("/website/"))).ServeHTTP(w, r)
 		} else {
-			fmt.Print("http://localhost:5173" + r.URL.Path)
+			fmt.Print("http://localhost:5173" + r.URL.Path + "\n")
 			functions.ServeReverseProxy("http://localhost:5173"+r.URL.Path, w, r)
 		}
 	})
