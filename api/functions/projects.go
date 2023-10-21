@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -26,7 +25,8 @@ type ContainerDetails struct {
 func GetProjects(w http.ResponseWriter, r *http.Request) {
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	// Get list of all containers
 	containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{
@@ -82,47 +82,67 @@ func GetProjects(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonBytes)
 }
 func CreateProject(w http.ResponseWriter, r *http.Request) {
+
 	id := r.URL.Query().Get("slug")
+	if id == "" {
+		http.Error(w, "No slug provided", http.StatusInternalServerError)
+		return
+	}
+
+	detailsFilePath := filepath.Join(globals.DataFolder, "pocketbase-"+id+"_details.json")
+	_, err := os.Stat(detailsFilePath)
+	if os.IsExist(err) {
+		os.Remove(detailsFilePath)
+	}
+
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
+
+	volumeMapping := fmt.Sprintf("/home/pocketbase/projects/%s:/pb/pb_data", id)
 	resp, err := cli.ContainerCreate(
 		context.Background(),
 		&container.Config{
 			Image: "monsieurlazar/pocketbase",
 		},
-		nil, nil, nil, "pocketbase-"+id,
+		&container.HostConfig{
+			Binds: []string{volumeMapping},
+		}, nil, nil, "pocketbase-"+id,
 	)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	//start container
 	err = cli.ContainerStart(context.Background(), resp.ID, types.ContainerStartOptions{})
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	//join network
 	err = cli.NetworkConnect(context.Background(), "lazar-static", resp.ID, nil)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	//return resp.ID to client answer to api
 	fmt.Println(resp.ID)
 
 	w.Write([]byte(resp.ID))
 }
+
 func StopProject(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("slug")
+	if id == "" {
+		http.Error(w, "No slug provided", http.StatusInternalServerError)
+		return
+	}
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	// Stop the container with the given ID
@@ -137,9 +157,14 @@ func StopProject(w http.ResponseWriter, r *http.Request) {
 
 func StartProject(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("slug")
+	if id == "" {
+		http.Error(w, "No slug provided", http.StatusInternalServerError)
+		return
+	}
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	// Start the container with the given ID

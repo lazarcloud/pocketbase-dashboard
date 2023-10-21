@@ -29,7 +29,7 @@ func main() {
 
 	http.HandleFunc("/create", functions.CreateProject)
 
-	http.HandleFunc("/containers", functions.GetProjects)
+	http.HandleFunc("/projects", functions.GetProjects)
 
 	http.HandleFunc("/stop", functions.StopProject)
 	http.HandleFunc("/start", functions.StartProject)
