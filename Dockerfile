@@ -10,6 +10,8 @@ COPY ./api/ ./
 
 RUN go build -o main .
 
+RUN chmod +x ./main
+
 
 FROM node:alpine AS svelte
 
@@ -25,7 +27,6 @@ RUN npm run build
 
 FROM busybox:latest AS runtime
 COPY --from=golang-build ./golang/main ./main
-RUN chmod +x ./main
 
 # COPY ./api/clean-data ./clean-data
 
