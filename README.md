@@ -73,6 +73,7 @@ Make sure you have Docker installed on your system. If not, you can download and
 Our future plans for PocketBase Dashboard include:
 
 - **Improved User Management**: Enhance user roles and permissions management features.
+- **Easier self hosting**: Auto network creation and management so that hosting becomes possible with one command.
 - **More Secury Auth Options**: Improve the security of the system with more secure auth alternatives.
 - **API Support**: Provide an api with auth keys for creating projects programatically.
 
