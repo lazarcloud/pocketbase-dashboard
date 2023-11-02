@@ -13,20 +13,25 @@
       },
     })
     const data = await response.json()
-    if (data?.hasProperty("error") && data?.hasProperty("errortype")) {
-      if (data.error && data.errortype != "auth") {
+    console.log(data)
+
+    if (data != null) {
+      if (data.hasOwnProperty("error")) {
         console.error(data.error)
         alert(data.error)
+
+        if (data.hasOwnProperty("errortype") && data.errortype == "auth") {
+          //set auth to null
+          auth.set({
+            password: null,
+            error: data.error,
+          })
+        }
+
         return null
       }
-      if (data.error && data.errortype == "auth") {
-        //set auth to null
-        auth.set({
-          password: null,
-          error: data.error,
-        })
-      }
     }
+
     return data
   }
 
@@ -67,7 +72,7 @@
       if (JSON.stringify(newData) !== JSON.stringify(projectsData)) {
         projectsData = newData
       }
-    }, 1000)
+    }, 2000)
 
     return () => {
       clearInterval(interval)
@@ -102,8 +107,16 @@
           <h2>{project.Name} - {project.Status}</h2>
           <p>Project description</p>
           <p>Created: 2021-01-01</p>
-          <p>API URL: https://pocket.lazar.lol/project/lazar/api/</p>
-          <p>Dashnoard URL: https://pocket.lazar.lol/project/lazar/_/</p>
+          <p>
+            API URL: {window.location.href}project/{project.Name.split(
+              "-"
+            )[1]}/api/
+          </p>
+          <p>
+            Dashnoard URL: {window.location.href}project/{project.Name.split(
+              "-"
+            )[1]}/_/
+          </p>
           <div class="separator" />
           <div class="controls">
             <button
