@@ -48,12 +48,13 @@ Make sure you have Docker installed on your system. If not, you can download and
      lazar-network:
        external: true
    ```
-Or you can use a docker run command.
+3. Or you can use a docker run command.
+   
    ```bash
    docker run -d -p 8081:80 -e ORIGIN=http://localhost:8081 -e DEFAULT_PASSWORD=example --name lazar-dash -v /var/run/docker.sock:/var/run/docker.sock -v /home/pocketbase/metadata:/data --network=lazar-static monsieurlazar/pocketbase-dashboard
    ```
 
-3. Start the PocketBase Dashboard container using Docker Compose:
+4. Start the PocketBase Dashboard container using Docker Compose:
 
    ```bash
    docker-compose up -d
@@ -61,9 +62,9 @@ Or you can use a docker run command.
 
    This will pull the necessary Docker image and start the PocketBase Dashboard container in the background.
 
-4. Access PocketBase Dashboard in your web browser by navigating to `http://your-server-ip:port` (replace `your-server-ip` and `port` with your server's IP address and the port you specified in the `docker-compose.yml` file).
+5. Access PocketBase Dashboard in your web browser by navigating to `http://your-server-ip:port` (replace `your-server-ip` and `port` with your server's IP address and the port you specified in the `docker-compose.yml` file).
 
-5. Log in using the default credentials:
+6. Log in using the default credentials:
 
    - **Password:** password
 
