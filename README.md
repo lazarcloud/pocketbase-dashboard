@@ -81,6 +81,7 @@ Our future plans for PocketBase Dashboard include:
 - **Easier self hosting**: Auto network creation and management so that hosting becomes possible with one command.
 - **More Secury Auth Options**: Improve the security of the system with more secure auth alternatives.
 - **API Support**: Provide an api with auth keys for creating projects programatically.
+- **Docs Website**: A website that helps you generate deployment code.
 
 <!-- We welcome contributions and feedback from the community to help us improve PocketBase Dashboard. Feel free to open issues and submit pull requests on our [GitHub repository](https://github.com/lazarcloud/pocketbase-dashboard)! -->
 
