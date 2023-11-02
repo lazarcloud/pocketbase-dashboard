@@ -1,6 +1,6 @@
 # PocketBase Dashboard
 
-PocketBase Dashboard is a self-hosted solution that allows you to manage and use PocketBase for personal use. With PocketBase Dashboard, you can have full control over your data and applications in a convenient and user-friendly way.
+[PocketBase Dashboard](https://lazarcloud.github.io/pocketbase-dashboard/) is a self-hosted solution that allows you to manage and use PocketBase for personal use. With PocketBase Dashboard, you can have full control over your data and applications in a convenient and user-friendly way.
 
 ![App Usage](https://github.com/lazarcloud/pocketbase-dashboard/blob/main/images/app.jpeg?raw=true)
 Example App Usage
@@ -22,7 +22,7 @@ Make sure you have Docker installed on your system. If not, you can download and
 
 ### Self-Hosting Guide
 
-For more help check out [PocketBase Dashboard Docs](https://lazarcloud.github.io/pocketbase-dashboard/).
+For more help check out [PB Dash Self-hosting Guide](https://lazarcloud.github.io/pocketbase-dashboard/selfhost).
 1. Create the pocketbase-dashboard docker network
 
    ```bash
