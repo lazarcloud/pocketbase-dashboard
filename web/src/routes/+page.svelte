@@ -109,19 +109,19 @@
           <p>Created: 2021-01-01</p>
           <p>
             API URL: {window.location.href}project/{project.Name.split(
-              "-"
+              "pocketbase-"
             )[1]}/api/
           </p>
           <p>
             Dashnoard URL: {window.location.href}project/{project.Name.split(
-              "-"
+              "pocketbase-"
             )[1]}/_/
           </p>
           <div class="separator" />
           <div class="controls">
             <button
               on:click={() => {
-                goto(`/project/${project.Name.split("-")[1]}/_/`)
+                goto(`/project/${project.Name.split("pocketbase-")[1]}/_/`)
               }}>Go to Dashboard</button
             >
             {#if project.Status == "running"}
