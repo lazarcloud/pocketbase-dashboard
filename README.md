@@ -22,6 +22,7 @@ Make sure you have Docker installed on your system. If not, you can download and
 
 ### Self-Hosting Guide
 
+For more help check out [PocketBase Dashboard Docs](https://lazarcloud.github.io/pocketbase-dashboard/)
 1. Create the pocketbase-dashboard docker network
 
    ```bash

@@ -1,4 +1,4 @@
-name: Deploy static SvelteKit content to Pages
+name: Deploy Docs Website to Pages
 
 on:
   push:
