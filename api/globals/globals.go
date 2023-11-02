@@ -2,4 +2,5 @@ package globals
 
 const DataFolder = "./data"
 
-const AuthFilePath = "./secure/auth.json"
+const AuthFileDirectory = "./secure"
+const AuthFilePath = AuthFileDirectory + "/auth.json"

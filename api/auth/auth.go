@@ -18,11 +18,9 @@ func FileExists(path string) bool {
 }
 
 func EnsurePathDirectoryExists(path string) error {
-	if !FileExists(path) {
-		err := os.MkdirAll(path, 0777)
-		if err != nil {
-			return err
-		}
+	err := os.MkdirAll(path, 0777)
+	if err != nil {
+		return err
 	}
 	return nil
 }
@@ -63,6 +61,7 @@ func CheckAuth(next http.HandlerFunc) http.HandlerFunc {
 				"errortype": "auth",
 				"error":     fmt.Sprintf("failed reading file: %s, try recreating the dashboard container.", err.Error()),
 			})
+			return
 		}
 
 		passwordData := Password{}
@@ -117,7 +116,7 @@ func WriteJSONToFile(path string, data []byte) error {
 }
 
 func PrepareDefaultAuth(defaultPassword string) error {
-	err := EnsurePathDirectoryExists(globals.AuthFilePath)
+	err := EnsurePathDirectoryExists(globals.AuthFileDirectory)
 	if err != nil {
 		return err
 	}
