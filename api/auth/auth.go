@@ -117,12 +117,11 @@ func WriteJSONToFile(path string, data []byte) error {
 }
 
 func PrepareDefaultAuth(defaultPassword string) error {
-
+	err := EnsurePathDirectoryExists(globals.AuthFilePath)
+	if err != nil {
+		return err
+	}
 	if !FileExists(globals.AuthFilePath) {
-		err := EnsurePathDirectoryExists(globals.AuthFilePath)
-		if err != nil {
-			return err
-		}
 		err = WriteJSONToFile(globals.AuthFilePath, []byte(fmt.Sprintf(`{"password": "%s"}`, defaultPassword)))
 		if err != nil {
 			return err
