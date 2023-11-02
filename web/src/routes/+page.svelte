@@ -2,12 +2,29 @@
   import { goto, invalidateAll } from "$app/navigation"
   import Logo from "$lib/Logo.svelte"
   import { onMount } from "svelte"
-
+  import { dev } from "$app/environment"
+  import { auth } from "$lib/auth"
   let baseURL = null
 
   async function fetchAPI(url) {
-    const response = await fetch(baseURL + url)
+    const response = await fetch(baseURL + url, {
+      headers: {
+        Authorization: "Bearer " + $auth.password,
+      },
+    })
     const data = await response.json()
+    if (data.error && data.errortype != "auth") {
+      console.error(data.error)
+      alert(data.error)
+      return null
+    }
+    if (data.error && data.errortype == "auth") {
+      //set auth to null
+      auth.set({
+        password: null,
+        error: data.error,
+      })
+    }
     return data
   }
 
@@ -42,7 +59,7 @@
   let interval = null
 
   onMount(() => {
-    baseURL = window.location.href
+    baseURL = dev ? "http://localhost:80/" : window.location.href
     interval = setInterval(async () => {
       let newData = await getProjects()
       if (JSON.stringify(newData) !== JSON.stringify(projectsData)) {

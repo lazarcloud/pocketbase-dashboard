@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/lazarcloud/pocketbase-dashboard/api/auth"
 	"github.com/lazarcloud/pocketbase-dashboard/api/functions"
 	"github.com/lazarcloud/pocketbase-dashboard/api/paths"
 )
@@ -29,9 +30,15 @@ func enableCORS(next http.HandlerFunc) http.HandlerFunc {
 
 func main() {
 	flag.StringVar(&origin, "origin", "http://localhost:8080/", "Define website origin")
+	defaultPassword := flag.String("default_password", "password", "Define default password")
 	flag.Parse()
 
 	fmt.Printf("Origin: %s\n", origin)
+
+	err := auth.PrepareDefaultAuth(*defaultPassword)
+	if err != nil {
+		panic(err)
+	}
 
 	http.HandleFunc("/", enableCORS(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("New request: %s\n", r.URL.Path)
@@ -50,10 +57,10 @@ func main() {
 		}
 	}))
 
-	http.HandleFunc("/create", enableCORS(functions.CreateProject))
-	http.HandleFunc("/projects", enableCORS(functions.GetProjects))
-	http.HandleFunc("/stop", enableCORS(functions.StopProject))
-	http.HandleFunc("/start", enableCORS(functions.StartProject))
+	http.HandleFunc("/create", enableCORS(auth.CheckAuth(functions.CreateProject)))
+	http.HandleFunc("/projects", enableCORS(auth.CheckAuth(functions.GetProjects)))
+	http.HandleFunc("/stop", enableCORS(auth.CheckAuth(functions.StopProject)))
+	http.HandleFunc("/start", enableCORS(auth.CheckAuth(functions.StartProject)))
 
 	http.ListenAndServe(":80", nil)
 }
