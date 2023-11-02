@@ -88,7 +88,7 @@
   </nav>
 
   <div class="controls">
-    <button>Settings</button>
+    <button on:click={() => alert("Not implemented yet")}>Settings</button>
     <button on:click={() => (showPopup = true)} class="black"
       ><div class="plus" />
       New Project</button
