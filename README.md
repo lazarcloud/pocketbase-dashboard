@@ -33,7 +33,7 @@ Make sure you have Docker installed on your system. If not, you can download and
        container_name: lazar-dash
        environment:
          - ORIGIN=https://pocket.example.com/
-         - DEFAULT_PASSWORD=lazar123 //defaults to password
+         - DEFAULT_PASSWORD=example //defaults to password
        volumes:
          - /var/run/docker.sock:/var/run/docker.sock
          - /home/pocketbase/metadata:/data
@@ -49,6 +49,10 @@ Make sure you have Docker installed on your system. If not, you can download and
        external: true
    ```
 
+```bash
+   docker run -d -p 8081:80 -e ORIGIN=http://localhost:8081 -e DEFAULT_PASSWORD=example --name lazar-dash -v /var/run/docker.sock:/var/run/docker.sock -v /home/pocketbase/metadata:/data --network=lazar-static monsieurlazar/pocketbase-dashboard
+```
+
 3. Start the PocketBase Dashboard container using Docker Compose:
 
    ```bash
@@ -61,7 +65,7 @@ Make sure you have Docker installed on your system. If not, you can download and
 
 5. Log in using the default credentials:
 
-   - **Password:** lazar123
+   - **Password:** password
 
 ## Roadmap
 
