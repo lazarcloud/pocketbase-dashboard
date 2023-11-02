@@ -48,10 +48,10 @@ Make sure you have Docker installed on your system. If not, you can download and
      lazar-network:
        external: true
    ```
-
-```bash
+Or you can use a docker run command.
+   ```bash
    docker run -d -p 8081:80 -e ORIGIN=http://localhost:8081 -e DEFAULT_PASSWORD=example --name lazar-dash -v /var/run/docker.sock:/var/run/docker.sock -v /home/pocketbase/metadata:/data --network=lazar-static monsieurlazar/pocketbase-dashboard
-```
+   ```
 
 3. Start the PocketBase Dashboard container using Docker Compose:
 
