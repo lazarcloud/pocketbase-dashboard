@@ -50,12 +50,12 @@
     <div>docker network create lazar-static</div>
     {#if method == "dockerRun"}
       <h3>Run with a docker run command.</h3>
-      <div class="code">
+      <p class="code">
         docker run -d -p 8081:80 -e ORIGIN={serverOrigin} -e DEFAULT_PASSWORD={password}
         --name
         {containerName} -v /var/run/docker.sock:/var/run/docker.sock -v {storagePath}:/data
         --network=lazar-static {imageName}
-      </div>
+      </p>
     {:else if method == "dockerCompose"}
       <h3>Run with a docker compose file.</h3>
       <div class="code">
@@ -120,15 +120,6 @@
 </section>
 
 <style>
-  section {
-    padding: 1rem;
-    border: 1px solid #d7dde4;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-radius: 0.5rem;
-    width: 100%;
-    max-width: 1000px;
-  }
   span {
     --space: 0;
     margin-left: calc(16px * var(--space));
@@ -142,6 +133,67 @@
   span.gray {
     color: gray;
   }
+
+  /* layouts */
+
+  section {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    border: 1px solid #d7dde4;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 0.5rem;
+  }
+  .controls,
+  .commands {
+    padding: 1rem 2rem;
+  }
+  .commands {
+    border-left: 1px solid #d7dde4;
+  }
+
+  /* type selector */
+
+  input[type="radio"] {
+    display: none;
+  }
+  input[type="radio"]:checked + label {
+    background-color: #d7dde4;
+  }
+  label.button {
+    display: block;
+    padding: 0.5rem;
+    margin-left: -0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  /* input form */
+
+  form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  form label {
+    display: flex;
+    margin-bottom: 0.5rem;
+    place-items: center;
+  }
+  form input {
+    padding: 0.5rem;
+    border-radius: 4px;
+    background-color: transparent;
+    border: 1px solid #d7dde4;
+  }
+
   .code {
     padding: 1rem;
     border-radius: 0.5rem;
@@ -149,47 +201,13 @@
     border: 1px solid #d7dde4;
     width: 100%;
     overflow-x: auto;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-word;
+    word-break: break-word;
   }
-  input[type="radio"] {
-    display: none;
-  }
-  input[type="radio"]:checked + label {
-    background-color: #d7dde4;
-  }
-  .buttons {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  label.button {
-    padding: 0.5rem;
-    margin-left: -0.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(4, 1fr);
-    gap: 1rem;
-  }
-  label {
-    display: flex;
-    margin-bottom: 0.5rem;
-    place-items: center;
-  }
-  input {
-    padding: 0.5rem;
-    border-radius: 4px;
-    border: 1px solid #d7dde4;
-  }
-  .controls {
-    padding: 1rem 2rem;
-  }
-  .commands {
-    padding: 1rem 2rem;
-    border-left: 1px solid #d7dde4;
-  }
+
   @media (max-width: 900px) {
     section {
       grid-template-columns: 1fr;
