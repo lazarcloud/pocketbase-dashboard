@@ -8,8 +8,8 @@
 <h1 class="title">Pocketbase Dashboard</h1>
 <p>
   PocketBase Dashboard is a self-hosted solution that allows you to manage and
-  use PocketBase for personal use. With PocketBase Dashboard, you can have full
-  control over your data and applications in a convenient and user-friendly way.
+  use PocketBase for personal use. With this, you can have full control over
+  your data and applications in a convenient and user-friendly way.
 </p>
 
 <h2>Features</h2>
