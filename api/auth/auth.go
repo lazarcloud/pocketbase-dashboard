@@ -17,6 +17,16 @@ func FileExists(path string) bool {
 	return true
 }
 
+func EnsurePathDirectoryExists(path string) error {
+	if !FileExists(path) {
+		err := os.MkdirAll(path, 0777)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func CheckAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		//get Authorizations Header
@@ -109,7 +119,11 @@ func WriteJSONToFile(path string, data []byte) error {
 func PrepareDefaultAuth(defaultPassword string) error {
 
 	if !FileExists(globals.AuthFilePath) {
-		err := WriteJSONToFile(globals.AuthFilePath, []byte(fmt.Sprintf(`{"password": "%s"}`, defaultPassword)))
+		err := EnsurePathDirectoryExists(globals.AuthFilePath)
+		if err != nil {
+			return err
+		}
+		err = WriteJSONToFile(globals.AuthFilePath, []byte(fmt.Sprintf(`{"password": "%s"}`, defaultPassword)))
 		if err != nil {
 			return err
 		}
