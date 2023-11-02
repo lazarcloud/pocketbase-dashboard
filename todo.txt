@@ -1,1 +1,2 @@
 password hashing
+proper dockerignore for smaller image size
