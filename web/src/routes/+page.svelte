@@ -13,7 +13,7 @@
       },
     })
     const data = await response.json()
-    if (data.hasProperty("error") && data.hasProperty("errortype")) {
+    if (data?.hasProperty("error") && data?.hasProperty("errortype")) {
       if (data.error && data.errortype != "auth") {
         console.error(data.error)
         alert(data.error)
