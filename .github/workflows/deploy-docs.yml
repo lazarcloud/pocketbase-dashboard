@@ -2,7 +2,11 @@ name: Deploy static SvelteKit content to Pages
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
+    paths:
+      - .github/workflows/deploy-docs.yml
+      - docs/**
   workflow_dispatch:
 
 permissions:
@@ -21,19 +25,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: pnpm
 
       - name: Install dependencies
-        run: cd docs && pnpm i
+        run: cd docs && npm i
 
       - name: Setup Pages
         uses: actions/configure-pages@v3
@@ -41,7 +39,7 @@ jobs:
           static_site_generator: "sveltekit"
 
       - name: Build site
-        run: cd docs && pnpm run build
+        run: cd docs && npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
