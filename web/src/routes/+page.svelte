@@ -13,17 +13,19 @@
       },
     })
     const data = await response.json()
-    if (data.error && data.errortype != "auth") {
-      console.error(data.error)
-      alert(data.error)
-      return null
-    }
-    if (data.error && data.errortype == "auth") {
-      //set auth to null
-      auth.set({
-        password: null,
-        error: data.error,
-      })
+    if (data.hasProperty("error") && data.hasProperty("errortype")) {
+      if (data.error && data.errortype != "auth") {
+        console.error(data.error)
+        alert(data.error)
+        return null
+      }
+      if (data.error && data.errortype == "auth") {
+        //set auth to null
+        auth.set({
+          password: null,
+          error: data.error,
+        })
+      }
     }
     return data
   }
