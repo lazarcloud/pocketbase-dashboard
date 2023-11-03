@@ -1,6 +1,6 @@
 # PocketBase Dashboard
 
-[PocketBase Dashboard](pocketbase.lazar.lol) is a self-hosted solution that allows you to manage and use PocketBase for personal use. With this, you can have full control over your data and applications in a convenient and user-friendly way.
+[PocketBase Dashboard](https://pocketbase.lazar.lol) is a self-hosted solution that allows you to manage and use PocketBase for personal use. With this, you can have full control over your data and applications in a convenient and user-friendly way.
 
 ![App Usage](https://github.com/lazarcloud/pocketbase-dashboard/blob/main/images/app.jpeg?raw=true)
 Example App Usage
