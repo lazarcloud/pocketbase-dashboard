@@ -1,3 +1,5 @@
 password hashing
 pocketbase image creation with proper versioning
 data backup
+add individual cors for every project
+move to a database
