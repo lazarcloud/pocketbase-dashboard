@@ -10,18 +10,20 @@
     <Logo />
     <p>PB Dash</p>
   </div>
-  <a
-    class={path == "/pocketbase-dashboard/" ? "selected" : ""}
-    href="/pocketbase-dashboard/">Home</a
-  >
-  <a
-    class={path == "/pocketbase-dashboard/selfhost" ? "selected" : ""}
-    href="/pocketbase-dashboard/selfhost">Self-hosting</a
-  >
-  <a
-    class={path == "/pocketbase-dashboard/roadmap" ? "selected" : ""}
-    href="/pocketbase-dashboard/roadmap">Roadmap</a
-  >
+  <div class="item">
+    <a
+      class={path == "/pocketbase-dashboard/" ? "selected" : ""}
+      href="/pocketbase-dashboard/">Home</a
+    >
+    <a
+      class={path == "/pocketbase-dashboard/selfhost" ? "selected" : ""}
+      href="/pocketbase-dashboard/selfhost">Self-hosting</a
+    >
+    <a
+      class={path == "/pocketbase-dashboard/roadmap" ? "selected" : ""}
+      href="/pocketbase-dashboard/roadmap">Roadmap</a
+    >
+  </div>
 </nav>
 
 <style>
