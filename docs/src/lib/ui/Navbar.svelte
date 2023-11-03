@@ -27,7 +27,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 1rem 1rem;
   }
   .item,
   a {
@@ -35,6 +35,10 @@
     align-items: center;
     gap: 2.5rem;
     cursor: pointer;
+  }
+  .item:first-child {
+    gap: 1rem;
+    font-weight: 600;
   }
   a {
     color: inherit;
