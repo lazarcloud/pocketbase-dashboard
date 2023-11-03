@@ -16,7 +16,7 @@
       >Self-hosting</a
     >
     <a class={path == "/roadmap" ? "selected" : ""} href="/roadmap">Roadmap</a>
-    <a href="/github">
+    <a href="https://github.com/lazarcloud/pocketbase-dashboard">
       <Github />
     </a>
   </div>
