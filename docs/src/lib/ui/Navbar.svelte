@@ -1,6 +1,6 @@
 <script>
   import { page } from "$app/stores"
-  import { Logo } from "$ui"
+  import { Logo, Github } from "$ui"
   let path = $page.url.pathname
   $: path = $page.url.pathname
 </script>
@@ -11,18 +11,14 @@
     <p>PB Dash</p>
   </div>
   <div class="item">
-    <a
-      class={path == "/pocketbase-dashboard/" ? "selected" : ""}
-      href="/pocketbase-dashboard/">Home</a
+    <a class={path == "/" ? "selected" : ""} href="/">Home</a>
+    <a class={path == "/selfhost" ? "selected" : ""} href="/selfhost"
+      >Self-hosting</a
     >
-    <a
-      class={path == "/pocketbase-dashboard/selfhost" ? "selected" : ""}
-      href="/pocketbase-dashboard/selfhost">Self-hosting</a
-    >
-    <a
-      class={path == "/pocketbase-dashboard/roadmap" ? "selected" : ""}
-      href="/pocketbase-dashboard/roadmap">Roadmap</a
-    >
+    <a class={path == "/roadmap" ? "selected" : ""} href="/roadmap">Roadmap</a>
+    <a href="/github">
+      <Github />
+    </a>
   </div>
 </nav>
 
@@ -37,7 +33,7 @@
   a {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 2.5rem;
     cursor: pointer;
   }
   a {
@@ -47,5 +43,22 @@
   a.selected,
   a:hover {
     text-decoration: underline;
+  }
+  @media (max-width: 600px) {
+    .item:first-child p {
+      display: none;
+    }
+  }
+  @media (max-width: 520px) {
+    nav {
+      flex-direction: column;
+      align-items: flex-start;
+      align-items: center;
+    }
+    .item {
+      margin-bottom: 1rem;
+      flex-direction: column;
+      gap: 1rem;
+    }
   }
 </style>

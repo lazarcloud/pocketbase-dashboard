@@ -1,4 +1,3 @@
 password hashing
-proper dockerignore for smaller image size
 pocketbase image creation with proper versioning
 data backup

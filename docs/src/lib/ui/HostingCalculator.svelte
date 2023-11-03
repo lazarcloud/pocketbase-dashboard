@@ -144,6 +144,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     border-radius: 0.5rem;
+    background-color: white;
+    min-height: 100vh;
   }
   .controls,
   .commands {
