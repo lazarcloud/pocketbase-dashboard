@@ -13,6 +13,20 @@ import (
 
 var origin string
 
+func enableCORSStatic(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With")
+
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	}
+}
 func enableCORS(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", origin)
@@ -48,12 +62,17 @@ func main() {
 			r.URL.Path = "/" + strings.Join(pathManager.Parts()[3:], "/")
 			functions.ServeReverseProxy(targetURL, w, r)
 		} else if strings.HasPrefix(r.URL.Path, "/_app/immutable/") {
-			enableCORS(http.StripPrefix("/_app/immutable/", http.FileServer(http.Dir("/website/_app/immutable/"))).ServeHTTP(w, r))
+			// Add CORS headers here
+			http.StripPrefix("/_app/immutable/", http.FileServer(http.Dir("/website/_app/immutable/"))).ServeHTTP(w, r)
 		} else if strings.Contains(pathManager.GetFirstPart(), ".") {
-			enableCORS(http.StripPrefix("/", http.FileServer(http.Dir("/website/"))).ServeHTTP(w, r))
+			// Add CORS headers here
+			http.StripPrefix("/", http.FileServer(http.Dir("/website/"))).ServeHTTP(w, r)
 		} else {
-			fmt.Print("http://localhost:5173" + r.URL.Path + "\n")
-			enableCORS(functions.ServeReverseProxy("http://localhost:5173"+r.URL.Path, w, r))
+			// Add CORS headers here
+			enableCORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				fmt.Print("http://localhost:5173" + r.URL.Path + "\n")
+				functions.ServeReverseProxy("http://localhost:5173"+r.URL.Path, w, r)
+			}))
 		}
 	})
 
