@@ -69,10 +69,9 @@ func main() {
 			http.StripPrefix("/", http.FileServer(http.Dir("/website/"))).ServeHTTP(w, r)
 		} else {
 			// Add CORS headers here
-			enableCORS(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				fmt.Print("http://localhost:5173" + r.URL.Path + "\n")
-				functions.ServeReverseProxy("http://localhost:5173"+r.URL.Path, w, r)
-			}))
+			fmt.Print("http://localhost:5173" + r.URL.Path + "\n")
+			functions.ServeReverseProxy("http://localhost:5173"+r.URL.Path, w, r)
+
 		}
 	})
 
