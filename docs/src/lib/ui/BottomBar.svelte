@@ -2,7 +2,7 @@
   <p>© 2023 PocketBase Dashboard</p>
   <p>
     Crafted by
-    <a href="https://lazar.lol"> Lazar </a>
+    <a href="https://bylazar.com"> Lazar </a>
   </p>
 </section>
 
