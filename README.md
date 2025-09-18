@@ -1,9 +1,9 @@
 # PocketBase Dashboard
 
 
-For a more up-to-date guide use the [official website](https://pocketbase.lazar.lol).
+For a more up-to-date guide use the [official website](https://pocketbase.bylazar.com).
 
-[PocketBase Dashboard](https://pocketbase.lazar.lol) is a self-hosted solution that allows you to manage and use PocketBase for personal use. With this, you can have full control over your data and applications in a convenient and user-friendly way.
+[PocketBase Dashboard](https://pocketbase.bylazar.com) is a self-hosted solution that allows you to manage and use PocketBase for personal use. With this, you can have full control over your data and applications in a convenient and user-friendly way.
 
 ![App Usage](https://github.com/lazarcloud/pocketbase-dashboard/blob/main/images/app.jpeg?raw=true)
 Example App Usage
@@ -25,7 +25,7 @@ Make sure you have Docker installed on your system. If not, you can download and
 
 ### Self-Hosting Guide
 
-For more help check out [PB Dash Self-hosting Guide](pocketbase.lazar.lol/selfhost).
+For more help check out [PB Dash Self-hosting Guide](https://pocketbase.bylazar.com/selfhost).
 1. Create the pocketbase-dashboard docker network
 
    ```bash
