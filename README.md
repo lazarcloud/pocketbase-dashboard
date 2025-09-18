@@ -1,5 +1,6 @@
 # PocketBase Dashboard
 
+> **Status:** Archived - no longer maintained. Feel free to fork it.
 
 For a more up-to-date guide use the [official website](https://pocketbase.bylazar.com).
 
